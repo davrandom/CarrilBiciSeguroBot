@@ -1,6 +1,6 @@
 <?php
 /**
-* Telegram Bot example for mapping "ViaLiberabot".
+* Telegram Bot example for bike lanes safety "CarrilBiciSeguroBot". Translation of "ViaLiberaBot".
 * @author Francesco Piero Paolicelli
 */
 include("settings_t.php");
@@ -44,8 +44,8 @@ function start($telegram,$update)
 	date_default_timezone_set('Europe/Rome');
 	$today = date("Y-m-d H:i:s");
 
-	if ($text == "/start" || $text == "info" || $text == "©️info") {
-		$reply = "Benvenuto ".$first_name.". Questo Bot dimostrativo è stato realizzato da @piersoft ispirandosi a questo articolo su New York https://goo.gl/bUA0nm e permette le segnalazioni di infrazioni al codice della strada e casi di inciviltà legati a pargheggi selvaggi, occupazioni piste ciclabili etc. L'autore non è responsabile per l'uso improprio di questo strumento e dei contenuti degli utenti. Inviando le segnalazioni al corpo della Polizia Locale si è consapevoli che l'utente e la sua segnalazione (univoci su Telegram) vengono registrati e visualizzati pubblicamente su mappa con licenza CC0 (pubblico dominio). Tali dati, realtime, si possono scaricare da https://goo.gl/vNQYPw in formato CSV.\nPuoi chiedere di partecipare all'esperimento civico compilando questo semplice form: https://goo.gl/forms/29j5UtOx3MUkxoRG2. \n\nLa geocodifca dei dati avviene grazie al database Nominatim di openStreeMap con licenza oDBL";
+	if ($text == "/inicio" || $text == "info" || $text == "©️info") {
+		$reply = "Bienvenido ".$first_name.". Este Bot de pruebas ha sido creado por @piersoft inspirado por este artículo sobre Nueva York https://goo.gl/bUA0nm (in italiano). Este Bot permite señalar infracciones del Código de Tráfico y Seguridad Vial y casos de incivilidad, por ejemplo coches estacionando en el carril bici o en zonas que dificultan la visibilidad generando peligro. El autor no se hace responsable por el uso impropio de esta herramienta y del contenido enviado por los usuarios. Enviando tus informes eres consciente de que el usuario y el contenido de tu mensaje (unívocos en Telegram) serán grabados y visualizados públicamente sobre un mapa con licencia CC0 (público dominio). Estos datos, en tiempo real, se pueden descargar desde aquí  https://goo.gl/vNQYPw in formato CSV.\nPuedes pedir la autorización para participar en este experimento ciudadano comunitario rellenando este formulario: https://goo.gl/forms/29j5UtOx3MUkxoRG2. \n\nLa geo-codificación de los datos está hecha a través de la base de datos Nominatim de openStreetMap con licencia oDBL.";
 		$content = array('chat_id' => $chat_id, 'text' => $reply,'disable_web_page_preview'=>true);
 		$telegram->sendMessage($content);
 
@@ -56,23 +56,23 @@ function start($telegram,$update)
 
 		$log=$today. ",new chat started," .$chat_id. "\n";
 
-	}elseif ($text == "/location" || $text == "🌐posizione") {
+	}elseif ($text == "/posición" || $text == "🌐posición") {
 
-		$option = array(array($telegram->buildKeyboardButton("Invia la tua posizione / send your location", false, true)) //this work
+		$option = array(array($telegram->buildKeyboardButton("Envía tu posición / send your location", false, true)) //this work
 											);
 	// Create a permanent custom keyboard
 	$keyb = $telegram->buildKeyBoard($option, $onetime=false);
-	$content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "Attiva la localizzazione sul tuo smartphone / Turn on your GPS");
+	$content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => " Activa la localización en tu móvil / Turn on your GPS");
 	$telegram->sendMessage($content);
 	exit;
-	}else if ($text == "/istruzioni" || $text == "istruzioni" || $text == "❓istruzioni") {
+	}else if ($text == "/instrucciones" || $text == "instrucciones" || $text == "❓instrucciones") {
 
 		$img = curl_file_create('istruzioni.png','image/png');
 		$contentp = array('chat_id' => $chat_id, 'photo' => $img);
 		$telegram->sendPhoto($contentp);
-		$content = array('chat_id' => $chat_id, 'text' => "[Immagine realizzata da Alessandro Ghezzer]");
+		$content = array('chat_id' => $chat_id, 'text' => "[Imagen realizada por Alessandro Ghezzer]");
 		$telegram->sendMessage($content);
-		$content = array('chat_id' => $chat_id, 'text' => "Dopo che hai inviato il tuo FILE puoi aggiungere un testo.\nDevi digitare t:numsegnalazione:testo\nper esempio <b>t:123:macchina in terza fila.</b>\nPuò modificare il testo solo lo username che ha fatto la segnalazione.",'parse_mode'=>"HTML");
+		$content = array('chat_id' => $chat_id, 'text' => "Después de enviar tu FICHERO puedes añadir un texto.\nTienes que digitar t:numinforme:texto\npor ejemplo <b>t:123:coche aparcado en la acera</b>Solamente el usuario que ha enviado el mensaje puede modificarlo.",'parse_mode'=>"HTML");
 		$telegram->sendMessage($content);
 		$log=$today. ",istruzioni," .$chat_id. "\n";
 
@@ -82,10 +82,10 @@ function start($telegram,$update)
 		exec(' sqlite3 -header -csv '.$db_path.' "select * from segnalazioni;" > '.$csv_path. ' ');
 
 	}
-		elseif ($text=="aggiorna" || $text =="/aggiorna" || $text =="❌aggiorna" )
+		elseif ($text=="actualiza" || $text =="/actualiza" || $text =="❌actualiza" )
 			{
 
-				$reply = "Per aggiornare una segnalazione digita a:numerosegnalazione, esempio a:699";
+				$reply = "Para actualizar un informe envía a:numinforme\npor ejemplo a:699";
 				$content = array('chat_id' => $chat_id, 'text' => $reply);
 				$telegram->sendMessage($content);
 
@@ -95,7 +95,7 @@ function start($telegram,$update)
 				$text=str_replace(" ","",$text);
 
 				if ($username==""){
-					$content = array('chat_id' => $chat_id, 'text' => "Devi obbligatoriamente impostare il tuo username nelle impostazioni di Telegram",'disable_web_page_preview'=>true);
+					$content = array('chat_id' => $chat_id, 'text' => "Tienes que poner un nombre de usuario en los ajustes/configuración de Telegram",'disable_web_page_preview'=>true);
 					$telegram->sendMessage($content);
 					$log=$today.",".$todayd. ",nousernameset," .$chat_id.",".$username.",".$user_id."\n";
 					file_put_contents('db/telegram.log', $log, FILE_APPEND | LOCK_EX);
@@ -120,11 +120,11 @@ function start($telegram,$update)
 					$statement = "UPDATE ".DB_TABLE_GEO ." SET aggiornata='gestita' WHERE bot_request_message ='".$text."'";
 		//	print_r($reply_to_msg['message_id']);
 					$db->exec($statement);
-					$reply = "Segnalazione n° ".$text." è stata aggiornata";
+					$reply = "Envío n° ".$text." actualizado";
 					$content = array('chat_id' => $chat_id, 'text' => $reply);
 					$telegram->sendMessage($content);
 					exec(' sqlite3 -header -csv '.$db_path.' "select * from segnalazioni;" > '.$csv_path. ' ');
-					$log=$today. ",segnalazione aggiornata," .$chat_id. "\n";
+					$log=$today. ",envío actualizado," .$chat_id. "\n";
 					$db1 = new SQLite3($db_path);
 					$q = "SELECT user,username FROM ".DB_TABLE_GEO ." WHERE bot_request_message='".$text."'";
 					$result=	$db1->query($q);
@@ -141,10 +141,10 @@ function start($telegram,$update)
 
 									 $i++;
 							 }
-							 $content = array('chat_id' => $row[0]['user'], 'text' => $row[$i]['username'].", la tua segnalazione è stata presa in gestione, ti ringraziamo.",'disable_web_page_preview'=>true);
+							 $content = array('chat_id' => $row[0]['user'], 'text' => $row[$i]['username'].", estamos gestionando tu envío. Gracias!",'disable_web_page_preview'=>true);
 						 	 $telegram->sendMessage($content);
 				}else{
-					$content = array('chat_id' => $chat_id, 'text' => $username.", non risulti essere un utente autorizzato ad aggiornare le segnalazioni.",'disable_web_page_preview'=>true);
+					$content = array('chat_id' => $chat_id, 'text' => $username.", no pareces tener autorización para actualizar los informes.",'disable_web_page_preview'=>true);
 					$telegram->sendMessage($content);
 					$this->create_keyboard($telegram,$chat_id);
 					exit;
@@ -173,7 +173,7 @@ function start($telegram,$update)
 			$statement = "UPDATE ".DB_TABLE_GEO ." SET text='".$text."' WHERE bot_request_message ='".$id."' AND username='".$username."'";
 //	print_r($reply_to_msg['message_id']);
 			$db->exec($statement);
-			$reply = "Segnalazione n° ".$id." è stata aggiornata, solo se sei stato tu l'utente segnalante";
+			$reply = "Se ha actualizado el informe n° ".$id.", únicamente si tu eres el usuario que lo creó.";
 			$content = array('chat_id' => $chat_id, 'text' => $reply);
 			$telegram->sendMessage($content);
 			exec(' sqlite3 -header -csv '.$db_path.' "select * from segnalazioni;" > '.$csv_path. ' ');
@@ -185,7 +185,7 @@ function start($telegram,$update)
 
 		{
 			if ($username==""){
-				$content = array('chat_id' => $chat_id, 'text' => "Devi obbligatoriamente impostare il tuo username nelle impostazioni di Telegram",'disable_web_page_preview'=>true);
+				$content = array('chat_id' => $chat_id, 'text' => "Tienes que poner un nombre de usuario en los ajustes/configuración de Telegram",'disable_web_page_preview'=>true);
 				$telegram->sendMessage($content);
 				$log=$today.",".$todayd. ",nousernameset," .$chat_id.",".$username.",".$user_id."\n";
 				file_put_contents('db/telegram.log', $log, FILE_APPEND | LOCK_EX);
@@ -209,7 +209,7 @@ function start($telegram,$update)
 							$this->location_manager($username,$db,$telegram,$user_id,$chat_id,$location);
 							exit;
 							}else{
-								$content = array('chat_id' => $chat_id, 'text' => $username.", non risulti essere un utente autorizzato ad inviare le segnalazioni. Compila questo form: https://goo.gl/forms/29j5UtOx3MUkxoRG2.",'disable_web_page_preview'=>true);
+								$content = array('chat_id' => $chat_id, 'text' => $username.", no pareces tener autorización para enviar informes. Rellena este formulario: https://goo.gl/forms/29j5UtOx3MUkxoRG2.",'disable_web_page_preview'=>true);
 								$telegram->sendMessage($content);
 								$this->create_keyboard($telegram,$chat_id);
 								exit;
@@ -237,9 +237,9 @@ if ($reply_to_msg != NULL){
 
 if ($type !=NULL) {
 $file_id=$type;
-$text="video allegato";
-$risposta="ID dell'allegato:".$file_id."\n";
-//$content = array('chat_id' => $chat_id, 'text' => "per inviare un allegato devi cliccare \xF0\x9F\x93\x8E e poi File");
+$text="vídeo adjunto";
+$risposta="ID ajunto:".$file_id."\n";
+//$content = array('chat_id' => $chat_id, 'text' => "para enviar un adjunto tienes que hacer click sobre \xF0\x9F\x93\x8E y después File");
 //$telegram->sendMessage($content);
 exit;
 }
@@ -256,7 +256,7 @@ $caption=$response["message"]["caption"];
 if ($caption != NULL) $text=$caption;
 //$risposta="ID dell'allegato: ".$file_id."\n";
 
-$content = array('chat_id' => $chat_id, 'text' => "per inviare un allegato devi cliccare \xF0\x9F\x93\x8E e poi File. \nQuesto perchè la risoluzione delle foto inviate direttamente dal rullino\nè molto bassa, mentre inviando la stessa foto come FILE\n viene mantenuta la risoluzione originale dello scatto.\nRimanda la tua posizione e riprova per cortesia");
+$content = array('chat_id' => $chat_id, 'text' => "para enviar un adjunto tienes que hacer click sobre \xF0\x9F\x93\x8E y después File.\nEsto porqué la resolución de las fotos enviadas directamente desde la galería es muy baja. Por eso te pedimos enviar la misma foto como FICHERO así se mantiene la resolución original de tu foto.\nEnvía otra vez tu posición e intentalo de nuevo, por favor.");
 $telegram->sendMessage($content);
 $statement = "DELETE FROM ". DB_TABLE_GEO ." where bot_request_message = '" . $reply_to_msg['message_id'] . "'";
 $db->exec($statement);
@@ -270,17 +270,17 @@ $typed=$response["message"]["document"]["file_id"];
 if ($typed !=NULL){
 $file_id=$typed;
 $file_name=$response["message"]["document"]["file_name"];
-$text="documento: ".$file_name." allegato";
-$risposta="ID dell'allegato:".$file_id."\n";
+$text="documento: ".$file_name." adjunto";
+$risposta="ID adjunto:".$file_id."\n";
 
 }
 
 $typev=$response["message"]["voice"]["file_id"];
 if ($typev !=NULL){
 $file_id=$typev;
-$text="audio allegato";
-$risposta="ID dell'allegato:".$file_id."\n";
-//$content = array('chat_id' => $chat_id, 'text' => "per inviare un allegato devi cliccare \xF0\x9F\x93\x8E e poi File");
+$text="audio adjunto";
+$risposta="ID adjunto:".$file_id."\n";
+//$content = array('chat_id' => $chat_id, 'text' => "para enviar un adjunto tienes que hacer click sobre \xF0\x9F\x93\x8E y después File.");
 //$telegram->sendMessage($content);
 exit;
 }
@@ -311,18 +311,18 @@ while($res = $result->fetchArray(SQLITE3_ASSOC))
 			 print_r($reply_to_msg['message_id']);
 			 $db->exec($statement);
 
-	  $reply = "La segnalazione n° ".$reply_to_msg['message_id']." è stata registrata.\nGrazie!\n";
- 		$reply .= "Puoi visualizzarla su :\nhttp://www.piersoft.it/vialiberabot/#18/".$row[0]['lat']."/".$row[0]['lng'];
+	  $reply = "Se ha registrado el informe n° ".$reply_to_msg['message_id']."\nGracias!\n";
+ 		$reply .= "Puedes verlo aquí:\nhttp://www.piersoft.it/vialiberabot/#18/".$row[0]['lat']."/".$row[0]['lng'];
  		$content = array('chat_id' => $chat_id, 'text' => $reply);
  		$telegram->sendMessage($content);
-		$content = array('chat_id' => $chat_id, 'text' => "Dopo che hai inviato la tua segnalazione puoi aggiungere un testo.\nDevi digitare t:numsegnalazione:testo\nper esempio <b>t:".$reply_to_msg['message_id'].":macchina in terza fila.</b>\nPuò modificare il testo solo lo username che ha fatto la segnalazione.",'parse_mode'=>"HTML");
+		$content = array('chat_id' => $chat_id, 'text' => " Después de enviar tu FICHERO puedes añadir un texto.\nTienes que digitar t:numseñalización:texto\npor ejemplo <b>t:".$reply_to_msg['message_id']."::coche aparcado en la acera</b>Solamente el usuario que ha enviado el mensaje puede modificarlo. ",'parse_mode'=>"HTML");
 		$telegram->sendMessage($content);
  		$log=$today. ",information for maps recorded," .$chat_id. "\n";
 
  		exec(' sqlite3 -header -csv '.$db_path.' "select * from segnalazioni;" > '.$csv_path. ' ');
-		$mappa = "Puoi visualizzarla su :\nhttp://www.piersoft.it/vialiberabot/#18/".$row[0]['lat']."/".$row[0]['lng'];
+		$mappa = "Puedes verlo aquí:\nhttp://www.piersoft.it/vialiberabot/#18/".$row[0]['lat']."/".$row[0]['lng'];
 
-		$content = array('chat_id' => GRUPPO, 'text' => "Segnalazione in arrivo numero ".$reply_to_msg['message_id']." da parte dell'utente ".$username." il ".$today."\n".$mappa);
+		$content = array('chat_id' => GRUPPO, 'text' => "Enviando informe".$reply_to_msg['message_id']." por parte del usuario ".$username." día ".$today."\n".$mappa);
 		$telegram->sendMessage($content);
 
 
@@ -331,7 +331,7 @@ while($res = $result->fetchArray(SQLITE3_ASSOC))
 
  	else{
 
- 		 $reply = "Hai selezionato un comando non previsto. Ricordati che devi prima inviare la tua posizione";
+ 		 $reply = "Has enviado un comando inexistente. Acuérdate que tienes que enviar tu posición primero!";
  		 $content = array('chat_id' => $chat_id, 'text' => $reply);
  		 $telegram->sendMessage($content);
 
@@ -354,7 +354,7 @@ while($res = $result->fetchArray(SQLITE3_ASSOC))
 // Crea la tastiera
 function create_keyboard($telegram, $chat_id)
  {
-	 			$option = array(["❓istruzioni"],["🌐posizione","©️info"]);
+	 			$option = array(["❓instrucciones"],["🌐posición","©️info"]);
 				$keyb = $telegram->buildKeyBoard($option, $onetime=true);
 				$content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "[guarda la mappa delle segnalazioni su http://www.piersoft.it/vialiberabot/ oppure invia la tua segnalazione cliccando \xF0\x9F\x93\x8E]");
 				$telegram->sendMessage($content);
@@ -367,7 +367,7 @@ function create_keyboard($telegram, $chat_id)
 function location_manager($username,$db,$telegram,$user_id,$chat_id,$location)
 	{
 		if ($username==""){
-			$content = array('chat_id' => $chat_id, 'text' => "Devi obbligatoriamente impostare il tuo username nelle impostazioni di Telegram",'disable_web_page_preview'=>true);
+			$content = array('chat_id' => $chat_id, 'text' => "Tienes que poner un nombre de usuario en los ajustes/configuración de Telegram",'disable_web_page_preview'=>true);
 			$telegram->sendMessage($content);
 			$log=$today.",".$todayd. ",nousernameset," .$chat_id.",".$username.",".$user_id."\n";
 			file_put_contents('db/telegram.log', $log, FILE_APPEND | LOCK_EX);
@@ -402,23 +402,17 @@ function location_manager($username,$db,$telegram,$user_id,$chat_id,$location)
 			$timec=str_replace("Z"," ",$timec);
 			//nascondo la tastiera e forzo l'utente a darmi una risposta
 
-	//		$forcehidek=$telegram->buildKeyBoardHide(true);
-	//	  $content = array('chat_id' => $chat_id, 'text' => "Cosa vuoi comunicarci in questo posto?", 'reply_markup' =>$forcehide, 'reply_to_message_id' =>$bot_request_message_id);
-						$content = array('chat_id' => $chat_id, 'text' => "Cosa vuoi comunicarmi in ".$temp_c1."?", 'reply_markup' =>$forcehide, 'reply_to_message_id' =>$bot_request_message_id);
+            $content = array('chat_id' => $chat_id, 'text' => "qué es lo que nos quieres decir ".$temp_c1."?", 'reply_markup' =>$forcehide, 'reply_to_message_id' =>$bot_request_message_id);
 
 		  $bot_request_message=$telegram->sendMessage($content);
 
 		      	$forcehide=$telegram->buildForceReply(true);
 
 		  			//chiedo cosa sta accadendo nel luogo
-		// 		$content = array('chat_id' => $chat_id, 'text' => "[Scrivici cosa sta accadendo qui]", 'reply_markup' =>$forcehide, 'reply_to_message_id' =>$bot_request_message_id);
+		        $content = array('chat_id' => $chat_id, 'text' => "[escribe un mensaje o envía un FICHERO]", 'reply_markup' =>$forcehide, 'reply_to_message_id' =>$bot_request_message_id);
 
-		        $content = array('chat_id' => $chat_id, 'text' => "[scrivi il tuo messaggio o invia un FILE]", 'reply_markup' =>$forcehide, 'reply_to_message_id' =>$bot_request_message_id);
-
-//			$forcehide=$telegram->buildForceReply(true);
 
 			//chiedo cosa sta accadendo nel luogo
-	//	$content = array('chat_id' => $chat_id, 'text' => "[Cosa vuoi comunicarmi in questo luogo?".$lat.",".$lng, 'reply_markup' =>$forcehide, 'reply_to_message_id' =>$bot_request_message_id);
 			$bot_request_message=$telegram->sendMessage($content);
 
 
