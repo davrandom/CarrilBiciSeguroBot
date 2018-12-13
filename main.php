@@ -67,12 +67,12 @@ function start($telegram,$update)
 	exit;
 	}else if ($text == "/instrucciones" || $text == "instrucciones" || $text == "❓instrucciones") {
 
-		$img = curl_file_create('istruzioni.png','image/png');
+		$img = curl_file_create('instrucciones_small.png','image/png');
 		$contentp = array('chat_id' => $chat_id, 'photo' => $img);
 		$telegram->sendPhoto($contentp);
-		$content = array('chat_id' => $chat_id, 'text' => "[Imagen realizada por Alessandro Ghezzer]");
+		$content = array('chat_id' => $chat_id, 'text' => "[Imagen realizada por @brut_salvadi]");
 		$telegram->sendMessage($content);
-		$content = array('chat_id' => $chat_id, 'text' => "Después de enviar tu FICHERO puedes añadir un texto.\nTienes que digitar t:numinforme:texto\npor ejemplo <b>t:123:coche aparcado en la acera</b>Solamente el usuario que ha enviado el mensaje puede modificarlo.",'parse_mode'=>"HTML");
+		$content = array('chat_id' => $chat_id, 'text' => "Después de enviar tu FICHERO puedes añadir un texto.\nTienes que digitar t:numinforme:texto\npor ejemplo <b>t:123:coche aparcado en la acera</b>\nSolamente el usuarioque ha enviado el mensaje puede modificarlo.",'parse_mode'=>"HTML");
 		$telegram->sendMessage($content);
 		$log=$today. ",istruzioni," .$chat_id. "\n";
 
@@ -315,7 +315,7 @@ while($res = $result->fetchArray(SQLITE3_ASSOC))
  		$reply .= "Puedes verlo aquí:\nhttp://www.piersoft.it/vialiberabot/#18/".$row[0]['lat']."/".$row[0]['lng'];
  		$content = array('chat_id' => $chat_id, 'text' => $reply);
  		$telegram->sendMessage($content);
-		$content = array('chat_id' => $chat_id, 'text' => " Después de enviar tu FICHERO puedes añadir un texto.\nTienes que digitar t:numseñalización:texto\npor ejemplo <b>t:".$reply_to_msg['message_id']."::coche aparcado en la acera</b>Solamente el usuario que ha enviado el mensaje puede modificarlo. ",'parse_mode'=>"HTML");
+		$content = array('chat_id' => $chat_id, 'text' => " Después de enviar tu FICHERO puedes añadir un texto.\nTienes que digitar t:numseñalización:texto\npor ejemplo <b>t:".$reply_to_msg['message_id']."::coche aparcado en la acera</b>\nSolamente el usuarioque ha enviado el mensaje puede modificarlo. ",'parse_mode'=>"HTML");
 		$telegram->sendMessage($content);
  		$log=$today. ",information for maps recorded," .$chat_id. "\n";
 
